@@ -37,12 +37,16 @@ source venv/bin/activate
 
 ## Step 3 — Install dependencies
 
+`requirements.txt` covers only what the deployed Streamlit app needs (torch, torchvision, streamlit, pandas, scikit-learn, Pillow, numpy). Training, EDA, and the GAN pipeline need the additional packages in `requirements-train.txt` (tensorflow, matplotlib, seaborn, opencv-python, joblib, kagglehub, tqdm).
+
 ```bash
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-train.txt
 ```
 
-> **GPU users:** Install PyTorch with CUDA support first from https://pytorch.org/get-started/locally/, then run `pip install -r requirements.txt`.
+> Just running the Streamlit app (Step 8)? `pip install -r requirements.txt` alone is enough.
+
+> **GPU users:** Install PyTorch with CUDA support first from https://pytorch.org/get-started/locally/, then run the install command above.
 
 ---
 

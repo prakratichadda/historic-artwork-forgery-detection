@@ -1,0 +1,28 @@
+# ============================================================
+# Historic Artwork Forgery Detection — Training/EDA/GAN dependencies
+# Not needed to run the deployed Streamlit app; install this
+# alongside requirements.txt only when training models, running
+# EDA notebooks/scripts, or working on the GAN pipeline.
+# Install: pip install -r requirements.txt -r requirements-train.txt
+# ============================================================
+
+tqdm>=4.65
+
+# Visualisation (EDA, confusion matrix / classification report)
+matplotlib>=3.7,<4.0
+seaborn>=0.12,<1.0
+
+# TensorFlow (GAN pipeline only)
+# NOTE: tensorflow_addons is REMOVED — it was deprecated in 2023.
+#       Gaussian blur is now handled natively (see GAN/preprocess_images.py).
+tensorflow>=2.13,<2.17
+
+# Image processing (GAN preprocessing)
+opencv-python>=4.8,<5.0
+
+# Random Forest baseline model persistence (models/train.py)
+joblib>=1.3,<2.0
+
+# Dataset download
+kagglehub>=1.0
+requests>=2.31
