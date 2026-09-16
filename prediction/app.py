@@ -64,16 +64,55 @@ def predict_artist(image: Image.Image, model, label_encoder, artist_df):
         }
     return predicted_label, info
 
+# ==== SAMPLE PICKER ====
+SAMPLE_DIR = "images/sample"
+
+def get_sample_files():
+    if not os.path.isdir(SAMPLE_DIR):
+        return []
+    return sorted(f for f in os.listdir(SAMPLE_DIR) if f.lower().endswith((".jpg", ".jpeg", ".png")))
+
 # ==== STREAMLIT UI ====
 st.title("Artist Classifier 🎨")
 st.write("Upload a painting image and get the predicted artist along with artist details.")
 
+if "mode" not in st.session_state:
+    st.session_state.mode = None
+if "last_upload_key" not in st.session_state:
+    st.session_state.last_upload_key = None
+
+sample_files = get_sample_files()
+if sample_files:
+    st.write("**Try a sample:**")
+    cols = st.columns(len(sample_files))
+    for col, fname in zip(cols, sample_files):
+        with col:
+            st.image(os.path.join(SAMPLE_DIR, fname), use_container_width=True)
+            if st.button("Use this", key=f"sample_{fname}"):
+                st.session_state.mode = "sample"
+                st.session_state.selected_sample = fname
+
+st.write("**Or upload your own:**")
 uploaded_file = st.file_uploader("Drag and drop an image here", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
+    upload_key = (uploaded_file.name, uploaded_file.size)
+    if upload_key != st.session_state.last_upload_key:
+        st.session_state.mode = "upload"
+        st.session_state.last_upload_key = upload_key
+elif st.session_state.mode == "upload":
+    st.session_state.mode = None
+    st.session_state.last_upload_key = None
+
+image = None
+if st.session_state.mode == "upload" and uploaded_file is not None:
+    image = Image.open(uploaded_file).convert("RGB")
+elif st.session_state.mode == "sample" and st.session_state.get("selected_sample"):
+    image = Image.open(os.path.join(SAMPLE_DIR, st.session_state.selected_sample)).convert("RGB")
+
+if image is not None:
     try:
-        image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Selected Image", use_container_width=True)
 
         model = load_model()
         label_encoder = load_label_encoder()

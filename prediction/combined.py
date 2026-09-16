@@ -26,7 +26,11 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ====== LOAD AND CLEAN DATA ======
 df = pd.read_csv(CSV_PATH)
-df = df.head(4000)
+df = df.head(1000)
+
+# Keep only rows whose image file was actually downloaded
+df = df[df['ID'].apply(lambda i: os.path.exists(os.path.join(IMAGE_FOLDER, f"{i}.jpg")))].reset_index(drop=True)
+print(f"Images with files present: {len(df)}")
 
 # Keep only top 15 artists, group rest as 'Others'
 top_artists = df['artist'].value_counts().nlargest(15).index
