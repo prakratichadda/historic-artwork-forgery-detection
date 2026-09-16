@@ -1,7 +1,9 @@
 
 # Historic Artwork Forgery Detection
 
-A machine learning project to classify historic artworks and flag potential forgeries using deep learning, CNNs, and image metadata analysis.
+A machine learning project to classify historic artworks by artist using deep learning (CNNs) and image metadata analysis, with exploratory GAN-based forgery-detection research alongside it.
+
+**Live demo:** [historic-artwork-forgery-detec-hqnpdm7ah6qzzqqt7kv9ja.streamlit.app](https://historic-artwork-forgery-detec-hqnpdm7ah6qzzqqt7kv9ja.streamlit.app/)
 
 ---
 
@@ -9,7 +11,7 @@ A machine learning project to classify historic artworks and flag potential forg
 
 Historic artworks are essential to cultural heritage, but authenticating and cataloging them at scale remains challenging.  
 This project applies artificial intelligence—using convolutional neural networks (CNNs)—to automate the classification and metadata extraction of artwork images.  
-We also explore GAN-based approaches to detect suspicious or potentially manipulated artwork, supporting researchers, museums, and collectors.
+We also explore GAN-based approaches to detect suspicious or potentially manipulated artwork — this part is exploratory research code (see `GAN/`), not a feature of the live demo.
 
 ---
 
@@ -40,7 +42,7 @@ Key plots included distributions of top artists, periods, bases, and nationaliti
 - **Data Cleaning:** Merged metadata, mapped image paths, removed duplicates and missing entries.
 - **Model:** Used a ResNet-50 based CNN for multitask prediction (artist, period, nationality, base).
 - **Training:** Split the dataset for supervised learning, evaluated with accuracy and confusion matrices.
-- **Forgery Detection:** Used GANs to generate synthetic images and trained classifiers to separate real and generated artworks.
+- **Forgery Detection (exploratory):** `GAN/` trains a DCGAN generator/discriminator pair on real artwork images. This is research scaffolding, not a shipped feature — there's no saved discriminator checkpoint or scoring function, and it isn't wired into the live demo.
 
 ---
 
@@ -63,8 +65,9 @@ historic-artwork-forgery-detection/
 ├── prediction/           
 ├── utils/                
 ├── eda/                  
-├── GAN/                  
+├── GAN/                  # exploratory DCGAN training code and sample outputs; not currently wired into the live demo
 ├── requirements.txt      
+├── requirements-train.txt
 ├── .gitignore            
 └── README.md             
 
@@ -85,8 +88,8 @@ We ignore:
 
 ## 🏆 Results
 
-* Multitask ResNet-50 model achieves high accuracy for common artists and periods.
-* GAN-based forgery detection can flag many synthetic artworks, but is still experimental.
+* The ResNet-50 artist classifier is the working, deployed part of this project (see the live demo).
+* GAN-based forgery detection (`GAN/`) is exploratory training code only — no trained discriminator or scoring function exists yet, so it isn't part of the demo's results.
 * Limitations include class imbalance and visual similarity across styles.
 
 ---
@@ -94,7 +97,7 @@ We ignore:
 ## ⚠️ Limitations & Future Work
 
 * The dataset is imbalanced (some artists/periods overrepresented).
-* Forgery detection can be improved with more diverse training data.
+* Turning the GAN discriminator into an actual forgery/anomaly score is future work, not a current feature.
 * Future work: integrate more metadata fields and advanced anomaly detection.
 
 ---
